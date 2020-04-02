@@ -9,7 +9,7 @@
 **Supports**: ILIAS 5.4 - 5.4
 
 ## Dependencies
-This plugin uses your code-question plugin to perform most of the work. Before installing and activating this plugin, please make sure you have installed https://github.com/frankbauer/ilias-asscodequestion.
+This plugin uses our code-question plugin to perform most of the work. Before installing and activating this plugin, please make sure you have installed https://github.com/frankbauer/ilias-asscodequestion.
 
 ## Installation
 
@@ -17,10 +17,10 @@ This plugin uses your code-question plugin to perform most of the work. Before i
 (create subdirectories, if necessary):
 `Customizing/global/plugins/Services/COPage/PageComponent/pcCodeQuestion`
 2. Go to Administration > Plugins
-3. Check that you have installed and activate `assCodeQuestion` 
-4. Choose **Update** for the `assCodeQuestion` plugin
-5. Choose **Activate** for the `assCodeQuestion` plugin
-6. Choose **Refresh** for the `assCodeQuestion` plugin languages
+3. Check that you already have installed and activate `assCodeQuestion` (the code-question plugin)
+4. Choose **Update** for the `pcCodeQuestion` plugin
+5. Choose **Activate** for the `pcCodeQuestion` plugin
+6. Choose **Refresh** for the `pcCodeQuestion` plugin languages
 
 There is nothing to configure for this plugin.
 
