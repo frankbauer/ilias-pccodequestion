@@ -9,7 +9,7 @@
 **Supports**: ILIAS 5.4 - 5.4
 
 ## Dependencies
-This plugin uses your code-question plugin to perform most of the work. Before installing and activating this plugin, please make sure you have installed https://github.com/frankbauer/ilias-asscodequestion.
+This plugin uses our code-question plugin to perform most of the work. Before installing and activating this plugin, please make sure you have installed https://github.com/frankbauer/ilias-asscodequestion.
 
 ## Installation
 
