@@ -317,12 +317,18 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 		return $form;
 	}
 
-	private function render($object, $editMode=false, $readOnly=false, $withSolution=false){			
-		$object->blocks()->ui()->prepareTemplate($this->tpl, self::URL_PATH);		
-
+	private function render($object, $forceAddJSAndCSS=false){					
 		$language = $object->blocks()->getLanguage();
-		$template = $this->plugin->getTemplate("tpl.copg_pgcp_codeqstpage_output.html");
-		$html = $object->blocks()->ui()->render($editMode, $readOnly, $withSolution, NULL, NULL);
+		
+		if ($forceAddJSAndCSS){		
+			$template = $this->plugin->getTemplate("tpl.copg_pgcp_codeqstpage_presentation.html");	
+			$object->blocks()->ui()->prepareTemplate($template, self::URL_PATH);		
+		} else {
+			$template = $this->plugin->getTemplate("tpl.copg_pgcp_codeqstpage_output.html");	
+			$object->blocks()->ui()->prepareTemplate($this->tpl, self::URL_PATH);		
+		}
+		
+		$html = $object->blocks()->ui()->render($false, false, false, NULL, NULL);
 
 
 		$template->setVariable("UUID", $object->blocks()->ui()->getUUID());
@@ -333,6 +339,13 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 		$template->setVariable("QUESTION_ID", $object->getId());
 		$template->setVariable("LABEL_VALUE1", $object->getPlugin()->txt('label_value1'));
 
+		if ($forceAddJSAndCSS){	
+			$template->fillCssFiles();
+			$template->fillInlineCss();
+
+			$template->fillJavaScriptFiles();
+            $template->fillOnLoadCode();
+		}
 		return $template->get();	
 	}
 
@@ -355,11 +368,11 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 * @return string $html
 	 */
 	function getElementHTML($a_mode, array $a_properties, $a_plugin_version)
-	{
+	{		
 		$object = new assCodeQuestion();				
 		$this->loadData($object, $a_properties);
 		
-		return $this->render($object, false, false, false, null, null);
+		return $this->render($object, $a_mode=='presentation');
 	}
  
 	/**
