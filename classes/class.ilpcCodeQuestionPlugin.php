@@ -30,11 +30,10 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 	 * Get Javascript files
 	 */
 	function getJavascriptFiles($a_mode)
-	{
-		
-		if ($a_mode=='presentation'){			
-		 	return array("js/legacyHelper.js");
-		}
+	{		
+		// if ($a_mode=='presentation'){			
+		//  	return array("js/legacyHelper.js");
+		// }
 		return array();
 	}
  

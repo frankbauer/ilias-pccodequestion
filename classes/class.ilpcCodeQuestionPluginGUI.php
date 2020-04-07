@@ -133,6 +133,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 */
 	public function create()
 	{
+		$this->setTabs("insert", true);
 		$this->store(true);
 	}
  
@@ -161,6 +162,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 */
 	function update()
 	{
+		$this->setTabs("edit");
 		$this->store(false);	
 	}
  
@@ -320,16 +322,10 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	private function render($object, $forceAddJSAndCSS=false){					
 		$language = $object->blocks()->getLanguage();
 		
-		if ($forceAddJSAndCSS){		
-			$template = $this->plugin->getTemplate("tpl.copg_pgcp_codeqstpage_presentation.html");	
-			$object->blocks()->ui()->prepareTemplate($template, self::URL_PATH);		
-		} else {
-			$template = $this->plugin->getTemplate("tpl.copg_pgcp_codeqstpage_output.html");	
-			$object->blocks()->ui()->prepareTemplate($this->tpl, self::URL_PATH);		
-		}
+		$template = $this->plugin->getTemplate("tpl.copg_pgcp_codeqstpage_output.html");	
+		$object->blocks()->ui()->prepareTemplate($this->tpl, self::URL_PATH);				
 		
 		$html = $object->blocks()->ui()->render($false, false, false, NULL, NULL);
-
 
 		$template->setVariable("UUID", $object->blocks()->ui()->getUUID());
 		$template->setVariable("QUESTIONTEXT", "");
@@ -339,13 +335,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 		$template->setVariable("QUESTION_ID", $object->getId());
 		$template->setVariable("LABEL_VALUE1", $object->getPlugin()->txt('label_value1'));
 
-		if ($forceAddJSAndCSS){	
-			$template->fillCssFiles();
-			$template->fillInlineCss();
-
-			$template->fillJavaScriptFiles();
-            $template->fillOnLoadCode();
-		}
+		$template->setVariable("MOUNTY", $object->blocks()->ui()->mountyJSCode(self::URL_PATH, !$forceAddJSAndCSS));		
 		return $template->get();	
 	}
 
@@ -369,7 +359,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 */
 	function getElementHTML($a_mode, array $a_properties, $a_plugin_version)
 	{		
-		$object = new assCodeQuestion();				
+		$object = new assCodeQuestion();		
 		$this->loadData($object, $a_properties);
 		
 		return $this->render($object, $a_mode=='presentation');
