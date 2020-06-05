@@ -5,6 +5,7 @@ include_once("./Services/COPage/classes/class.ilPageComponentPluginGUI.php");
  *
  * 
  * @author Alex Killing <alex.killing@gmx.de>
+ * @author Frank Bauer <frank.bauer@fau.de>
  * @version $Id$
  * @ilCtrl_isCalledBy ilpcCodeQuestionPluginGUI: ilPCPluggedGUI
  */
@@ -211,7 +212,6 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 			$prop = $this->getProperties();
 		}
 		$id = $prop['id']+0;
-
 		// /** @var $ilDB \ilDBInterface  */
         // global $ilDB;
         
@@ -225,6 +225,9 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 		// }
 		
 		$return = $this->plugin->loadDataForID($id);
+	
+		//print_r($prop); die;
+		//$return = array('data'=>($prop['data']));
 		$object->loadDataToBlocks($return, $id);			
         return $object;
 	}
@@ -247,10 +250,15 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 		if ($a_create){
 			$this->createData($object);
 			$properties = array(
-				'id' => $object->getID()
+				'id' => $object->getID(),
+				'data' => ($object->blocks->getJSONEncodedAdditionalData())
 			);
 		} else {
-			$this->updateData($object);			
+			$this->updateData($object);				
+			$properties = array(
+				'id' => $object->getID(),
+				'data' => ($object->blocks->getJSONEncodedAdditionalData())
+			);
 		}
 
 		$form = $this->initForm($object, $a_create);
@@ -264,7 +272,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 			if ($a_create){
 				$res = $this->createElement($properties);
 			} else {
-				//$res = $this->updateElement($properties);
+				$res = $this->updateElement($properties);
 			}
 			if ($res)
 			{
