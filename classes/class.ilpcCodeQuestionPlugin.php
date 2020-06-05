@@ -48,6 +48,33 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 		return array();
 	}
 
+	/**
+     * This function is called when the page content is cloned
+     * @param array 	$a_properties		(properties saved in the page, should be modified if neccessary)
+     * @param string	$a_plugin_version	(plugin version of the properties)
+     */
+    public function onClone(&$a_properties, $a_plugin_version)
+    {		
+		if ($question_id = $a_properties['id'])
+		{
+			$data = $this->loadDataForID($question_id);
+			$id = $this->storeData($data['data']);
+            $a_properties['id'] = $id;
+		}
+    }
+
+    /**
+     * This function is called before the page content is deleted
+     * @param array 	$a_properties		properties saved in the page (will be deleted afterwards)
+     * @param string	$a_plugin_version	plugin version of the properties
+     */
+    public function onDelete($a_properties, $a_plugin_version)
+    {		
+		if ($question_id = $a_properties['id']){
+			$this->deleteDataWithID($question_id);
+		}
+	}	
+
 	function storeData($data){
 		/** @var $ilDB \ilDBInterface  */
 		global $ilDB;
@@ -64,6 +91,16 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
         
         $query = "UPDATE `copg_pgcp_codeqstpage` SET `data` = %s WHERE `code_id` = %s";        
 		$result = $ilDB->manipulateF($query, array('text', 'integer'), array($data, $id));
+	}
+
+
+
+	function deleteDataWithID($id){
+		/** @var $ilDB \ilDBInterface  */
+        global $ilDB;
+				
+        $query = "DELETE FROM `copg_pgcp_codeqstpage` WHERE `code_id` = %s";        
+		$result = $ilDB->manipulateF($query, array('integer'), array($id));
 	}
 
 	function loadDataForID($id){
