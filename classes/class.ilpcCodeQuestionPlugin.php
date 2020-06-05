@@ -47,5 +47,39 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 		// }
 		return array();
 	}
+
+	function storeData($data){
+		/** @var $ilDB \ilDBInterface  */
+		global $ilDB;
+				
+		$query = "INSERT INTO `copg_pgcp_codeqstpage` (`data`) VALUES (%s);";        
+		$result = $ilDB->manipulateF($query, array('text'), array($data));
+		$id = $ilDB->getLastInsertId();
+		return $id;
+	}
+
+	function updateDataForID($data, $id){
+		/** @var $ilDB \ilDBInterface  */
+        global $ilDB;
+        
+        $query = "UPDATE `copg_pgcp_codeqstpage` SET `data` = %s WHERE `code_id` = %s";        
+		$result = $ilDB->manipulateF($query, array('text', 'integer'), array($data, $id));
+	}
+
+	function loadDataForID($id){
+		/** @var $ilDB \ilDBInterface  */
+        global $ilDB;
+        
+        $query = "SELECT `data` FROM `copg_pgcp_codeqstpage` WHERE `code_id` = %s";        
+		$result = $ilDB->queryF($query, array('integer'), array($id));
+
+		$return = ['data'=>''];
+		while ($row = $ilDB->fetchAssoc($result))
+        {
+            $return['data'] = $row['data'];            
+		}
+
+		return $return;
+	}
 }
 ?>

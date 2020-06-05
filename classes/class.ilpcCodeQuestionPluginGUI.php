@@ -178,12 +178,13 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 * Creat new entry in our databse
 	 */
 	private function createData($object){
-		/** @var $ilDB \ilDBInterface  */
-        global $ilDB;
+		// /** @var $ilDB \ilDBInterface  */
+        // global $ilDB;
         
-        $query = "INSERT INTO `copg_pgcp_codeqstpage` (`data`) VALUES (%s);";        
-		$result = $ilDB->manipulateF($query, array('text'), array($object->blocks->getJSONEncodedAdditionalData()));
-		$id = $ilDB->getLastInsertId();
+        // $query = "INSERT INTO `copg_pgcp_codeqstpage` (`data`) VALUES (%s);";        
+		// $result = $ilDB->manipulateF($query, array('text'), array($object->blocks->getJSONEncodedAdditionalData()));
+		// $id = $ilDB->getLastInsertId();
+		$id = $this->plugin->storeData($object->blocks->getJSONEncodedAdditionalData());
 		$object->setID($id);
         
         return $id;
@@ -193,12 +194,12 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 * Creat new entry in our databse
 	 */
 	private function updateData($object){
-		/** @var $ilDB \ilDBInterface  */
-        global $ilDB;
+		// /** @var $ilDB \ilDBInterface  */
+        // global $ilDB;
         
-        $query = "UPDATE `copg_pgcp_codeqstpage` SET `data` = %s WHERE `code_id` = %s";        
-		$result = $ilDB->manipulateF($query, array('text', 'integer'), array($object->blocks->getJSONEncodedAdditionalData(), $object->getID()));
-		
+        // $query = "UPDATE `copg_pgcp_codeqstpage` SET `data` = %s WHERE `code_id` = %s";        
+		// $result = $ilDB->manipulateF($query, array('text', 'integer'), array($object->blocks->getJSONEncodedAdditionalData(), $object->getID()));
+		$this->plugin->updateDataForID($object->blocks->getJSONEncodedAdditionalData(), $object->getID());
         return $object;
 	}
 
@@ -211,18 +212,19 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 		}
 		$id = $prop['id']+0;
 
-		/** @var $ilDB \ilDBInterface  */
-        global $ilDB;
+		// /** @var $ilDB \ilDBInterface  */
+        // global $ilDB;
         
-        $query = "SELECT `data` FROM `copg_pgcp_codeqstpage` WHERE `code_id` = %s";        
-		$result = $ilDB->queryF($query, array('integer'), array($id));
+        // $query = "SELECT `data` FROM `copg_pgcp_codeqstpage` WHERE `code_id` = %s";        
+		// $result = $ilDB->queryF($query, array('integer'), array($id));
 
-		$return = ['data'=>''];
-		while ($row = $ilDB->fetchAssoc($result))
-        {
-            $return['data'] = $row['data'];            
-		}
+		// $return = ['data'=>''];
+		// while ($row = $ilDB->fetchAssoc($result))
+        // {
+        //     $return['data'] = $row['data'];            
+		// }
 		
+		$return = $this->plugin->loadDataForID($id);
 		$object->loadDataToBlocks($return, $id);			
         return $object;
 	}
