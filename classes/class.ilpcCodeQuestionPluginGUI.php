@@ -5,6 +5,7 @@ include_once("./Services/COPage/classes/class.ilPageComponentPluginGUI.php");
  *
  * 
  * @author Alex Killing <alex.killing@gmx.de>
+ * @author Frank Bauer <frank.bauer@fau.de>
  * @version $Id$
  * @ilCtrl_isCalledBy ilpcCodeQuestionPluginGUI: ilPCPluggedGUI
  */
@@ -133,6 +134,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 */
 	public function create()
 	{
+		$this->setTabs("insert", true);
 		$this->store(true);
 	}
  
@@ -161,6 +163,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 */
 	function update()
 	{
+		$this->setTabs("edit");
 		$this->store(false);	
 	}
  
@@ -176,12 +179,13 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 * Creat new entry in our databse
 	 */
 	private function createData($object){
-		/** @var $ilDB \ilDBInterface  */
-        global $ilDB;
+		// /** @var $ilDB \ilDBInterface  */
+        // global $ilDB;
         
-        $query = "INSERT INTO `copg_pgcp_codeqstpage` (`data`) VALUES (%s);";        
-		$result = $ilDB->manipulateF($query, array('text'), array($object->blocks->getJSONEncodedAdditionalData()));
-		$id = $ilDB->getLastInsertId();
+        // $query = "INSERT INTO `copg_pgcp_codeqstpage` (`data`) VALUES (%s);";        
+		// $result = $ilDB->manipulateF($query, array('text'), array($object->blocks->getJSONEncodedAdditionalData()));
+		// $id = $ilDB->getLastInsertId();
+		$id = $this->plugin->storeData($object->blocks->getJSONEncodedAdditionalData());
 		$object->setID($id);
         
         return $id;
@@ -191,12 +195,12 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 * Creat new entry in our databse
 	 */
 	private function updateData($object){
-		/** @var $ilDB \ilDBInterface  */
-        global $ilDB;
+		// /** @var $ilDB \ilDBInterface  */
+        // global $ilDB;
         
-        $query = "UPDATE `copg_pgcp_codeqstpage` SET `data` = %s WHERE `code_id` = %s";        
-		$result = $ilDB->manipulateF($query, array('text', 'integer'), array($object->blocks->getJSONEncodedAdditionalData(), $object->getID()));
-		
+        // $query = "UPDATE `copg_pgcp_codeqstpage` SET `data` = %s WHERE `code_id` = %s";        
+		// $result = $ilDB->manipulateF($query, array('text', 'integer'), array($object->blocks->getJSONEncodedAdditionalData(), $object->getID()));
+		$this->plugin->updateDataForID($object->blocks->getJSONEncodedAdditionalData(), $object->getID());
         return $object;
 	}
 
@@ -208,19 +212,22 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 			$prop = $this->getProperties();
 		}
 		$id = $prop['id']+0;
-
-		/** @var $ilDB \ilDBInterface  */
-        global $ilDB;
+		// /** @var $ilDB \ilDBInterface  */
+        // global $ilDB;
         
-        $query = "SELECT `data` FROM `copg_pgcp_codeqstpage` WHERE `code_id` = %s";        
-		$result = $ilDB->queryF($query, array('integer'), array($id));
+        // $query = "SELECT `data` FROM `copg_pgcp_codeqstpage` WHERE `code_id` = %s";        
+		// $result = $ilDB->queryF($query, array('integer'), array($id));
 
-		$return = ['data'=>''];
-		while ($row = $ilDB->fetchAssoc($result))
-        {
-            $return['data'] = $row['data'];            
-		}
+		// $return = ['data'=>''];
+		// while ($row = $ilDB->fetchAssoc($result))
+        // {
+        //     $return['data'] = $row['data'];            
+		// }
 		
+		$return = $this->plugin->loadDataForID($id);
+	
+		//print_r($prop); die;
+		//$return = array('data'=>($prop['data']));
 		$object->loadDataToBlocks($return, $id);			
         return $object;
 	}
@@ -243,10 +250,15 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 		if ($a_create){
 			$this->createData($object);
 			$properties = array(
-				'id' => $object->getID()
+				'id' => $object->getID(),
+				'data' => ($object->blocks->getJSONEncodedAdditionalData())
 			);
 		} else {
-			$this->updateData($object);			
+			$this->updateData($object);				
+			$properties = array(
+				'id' => $object->getID(),
+				'data' => ($object->blocks->getJSONEncodedAdditionalData())
+			);
 		}
 
 		$form = $this->initForm($object, $a_create);
@@ -260,7 +272,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 			if ($a_create){
 				$res = $this->createElement($properties);
 			} else {
-				//$res = $this->updateElement($properties);
+				$res = $this->updateElement($properties);
 			}
 			if ($res)
 			{
@@ -320,16 +332,10 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	private function render($object, $forceAddJSAndCSS=false){					
 		$language = $object->blocks()->getLanguage();
 		
-		if ($forceAddJSAndCSS){		
-			$template = $this->plugin->getTemplate("tpl.copg_pgcp_codeqstpage_presentation.html");	
-			$object->blocks()->ui()->prepareTemplate($template, self::URL_PATH);		
-		} else {
-			$template = $this->plugin->getTemplate("tpl.copg_pgcp_codeqstpage_output.html");	
-			$object->blocks()->ui()->prepareTemplate($this->tpl, self::URL_PATH);		
-		}
+		$template = $this->plugin->getTemplate("tpl.copg_pgcp_codeqstpage_output.html");	
+		$object->blocks()->ui()->prepareTemplate($this->tpl, self::URL_PATH);				
 		
 		$html = $object->blocks()->ui()->render($false, false, false, NULL, NULL);
-
 
 		$template->setVariable("UUID", $object->blocks()->ui()->getUUID());
 		$template->setVariable("QUESTIONTEXT", "");
@@ -339,13 +345,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 		$template->setVariable("QUESTION_ID", $object->getId());
 		$template->setVariable("LABEL_VALUE1", $object->getPlugin()->txt('label_value1'));
 
-		if ($forceAddJSAndCSS){	
-			$template->fillCssFiles();
-			$template->fillInlineCss();
-
-			$template->fillJavaScriptFiles();
-            $template->fillOnLoadCode();
-		}
+		$template->setVariable("MOUNTY", $object->blocks()->ui()->mountyJSCode(self::URL_PATH, !$forceAddJSAndCSS));		
 		return $template->get();	
 	}
 
@@ -369,7 +369,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 */
 	function getElementHTML($a_mode, array $a_properties, $a_plugin_version)
 	{		
-		$object = new assCodeQuestion();				
+		$object = new assCodeQuestion();		
 		$this->loadData($object, $a_properties);
 		
 		return $this->render($object, $a_mode=='presentation');

@@ -15,4 +15,6 @@ $ilias_max_version = "5.4";
 $responsible = "Frank Bauer";
 $responsible_mail = "frank.bauer@fau.de";
 
+// this plugin has an own exporter class
+$supports_export = true;
 ?>
