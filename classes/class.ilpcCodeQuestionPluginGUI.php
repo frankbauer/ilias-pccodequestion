@@ -251,13 +251,13 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 			$this->createData($object);
 			$properties = array(
 				'id' => $object->getID(),
-				'data' => ($object->blocks->getJSONEncodedAdditionalData())
+				'data' => ''//($object->blocks->getJSONEncodedAdditionalData())
 			);
 		} else {
 			$this->updateData($object);				
 			$properties = array(
 				'id' => $object->getID(),
-				'data' => ($object->blocks->getJSONEncodedAdditionalData())
+				'data' => ''//($object->blocks->getJSONEncodedAdditionalData())
 			);
 		}
 
