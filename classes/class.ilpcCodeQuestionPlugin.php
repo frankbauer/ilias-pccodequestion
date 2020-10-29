@@ -11,6 +11,7 @@ include_once("./Services/COPage/classes/class.ilPageComponentPlugin.php");
 */
 class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 {
+    const DATA_VERSION = 1;
 	final function getPluginName()
 	{
 		return "pcCodeQuestion";
@@ -59,8 +60,15 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 		if ($question_id = $a_properties['id'])
 		{
 			$data = $this->loadDataForID($question_id);
-			$id = $this->storeData($data['data']);
+			$id = $this->storeData(trim($a_properties['data']));
             $a_properties['id'] = $id;
+
+            //make sure v is the last property, and data ends with a space
+            $oldv = $a_properties['v'] + 0;
+            unset($a_properties['v']);
+            $a_properties['data'] = trim($a_properties['data']).' ';
+            $a_properties['v'] = $oldv;
+            
 		}
     }
 

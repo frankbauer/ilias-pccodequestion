@@ -202,9 +202,15 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 		}
 		$id = $prop['id']+0;
 		
-		$return = $this->plugin->loadDataForID($id);
-	
-		$object->loadDataToBlocks($return, $id);			
+        if ($prop['data'] != '' && $prop['v']>=1 ){
+            $return = array('data' => $prop['data']);
+        } else {                    
+            $return = $this->plugin->loadDataForID($id);            
+        }
+        
+		$object->loadDataToBlocks($return, $id);
+        $object->setID($id);
+
         return $object;
 	}
 
@@ -225,15 +231,17 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 		
 		if ($a_create){
 			$this->createData($object);
-			$properties = array(
-				'id' => $object->getID(),
-				'data' => ''//($object->blocks->getJSONEncodedAdditionalData())
+			$properties = array(				
+                'id' => $object->getID(),
+                'data' => $object->blocks->getJSONEncodedAdditionalData().' ',
+                'v' => ilpcCodeQuestionPlugin::DATA_VERSION
 			);
 		} else {
 			$this->updateData($object);				
-			$properties = array(
-				'id' => $object->getID(),
-				'data' => ''//($object->blocks->getJSONEncodedAdditionalData())
+			$properties = array(				
+                'id' => $object->getID(),
+				'data' => $object->blocks->getJSONEncodedAdditionalData().' ',
+                'v' => ilpcCodeQuestionPlugin::DATA_VERSION
 			);
 		}
 
@@ -318,7 +326,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 		$template->setVariable("BLOCK_HTML", $html);		
 		$template->setVariable("LANGUAGE", $language);
 		
-		$template->setVariable("QUESTION_ID", $object->getId());
+        $template->setVariable("QUESTION_ID", $object->getId());
 		$template->setVariable("LABEL_VALUE1", $object->getPlugin()->txt('label_value1'));
 
 		$template->setVariable("MOUNTY", $object->blocks()->ui()->mountyJSCode(self::URL_PATH, !$forceAddJSAndCSS));		
@@ -333,8 +341,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 		}
 
 		return (substr($haystack, -$length) === $needle);
-	}
-
+	}    
 	
  
 	/**
@@ -346,8 +353,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	function getElementHTML($a_mode, array $a_properties, $a_plugin_version)
 	{		
 		$object = new assCodeQuestion();		
-		$this->loadData($object, $a_properties);
-		
+		$this->loadData($object, $a_properties);		
 		return $this->render($object, $a_mode=='presentation');
 	}
  
