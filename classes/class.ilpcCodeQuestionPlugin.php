@@ -23,7 +23,8 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 	 */
 	function isValidParentType($a_parent_type)
 	{
-		return in_array($a_parent_type, array("lm", "wpg", "stys"));
+        //return in_array($a_parent_type, array("lm", "wpg", "cont"));
+        return in_array($a_parent_type, array("lm", "wpg"));
 	}
 
 	/**
