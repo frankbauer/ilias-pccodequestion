@@ -12,6 +12,15 @@ include_once("./Services/COPage/classes/class.ilPageComponentPlugin.php");
 class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 {
     const DATA_VERSION = 1;
+    /** @var ilassCodeQuestionPlugin */
+	protected $plugin;
+    public function __construct()
+	{
+		parent::__construct();
+        include_once "./Services/Component/classes/class.ilPlugin.php";
+		$this->plugin = ilPlugin::getPluginObject(IL_COMP_MODULE, "TestQuestionPool", "qst", "assCodeQuestion");
+		$this->plugin->includeClass("support/codeBlock.php");		
+    }
 	final function getPluginName()
 	{
 		return "pcCodeQuestion";
@@ -56,7 +65,7 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
      * @param string	$a_plugin_version	(plugin version of the properties)
      */
     public function onClone(&$a_properties, $a_plugin_version)
-    {		
+    {		        
 		if ($question_id = $a_properties['id'])
 		{
 			$data = $this->loadDataForID($question_id);
@@ -66,9 +75,8 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
             //make sure v is the last property, and data ends with a space
             $oldv = $a_properties['v'] + 0;
             unset($a_properties['v']);
-            $a_properties['data'] = trim($a_properties['data']).' ';
+            $a_properties['data'] = codeBlock::fixCodeForExport(trim($a_properties['data'])).' ';
             $a_properties['v'] = $oldv;
-            
 		}
     }
 
