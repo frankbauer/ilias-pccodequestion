@@ -26,7 +26,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	/** @var  ilTemplate $tpl */
 	protected $tpl;
 
-	/** @var ilpcCodeQuestionPlugin */
+	/** @var ilassCodeQuestionPlugin */
 	protected $plugin;
 
 	/** @var ilAccessHandler */
