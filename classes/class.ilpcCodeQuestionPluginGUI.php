@@ -1,5 +1,7 @@
 <?php
 include_once("./Services/COPage/classes/class.ilPageComponentPluginGUI.php");
+require_once 'support/ilpcCodeQuestionExporter.helper.php';
+
 /**
  * Code Question Page user interface plugin
  *
@@ -18,7 +20,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	const URL_PATH = "./Customizing/global/plugins/Modules/TestQuestionPool/Questions/assCodeQuestion";
     
    /** @var  ilLanguage $lng */
-	protected $lng;
+	protected ilLanguage $lng;
 
 	/** @var  ilCtrl $ctrl */
 	protected $ctrl;
@@ -27,7 +29,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	protected $tpl;
 
 	/** @var ilassCodeQuestionPlugin */
-	protected $plugin;
+	protected ilPageComponentPlugin $plugin;
 
 	/** @var ilAccessHandler */
     protected $access;
@@ -59,7 +61,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 		parent::__construct();
 		
 		include_once "./Services/Component/classes/class.ilPlugin.php";
-		$this->plugin = ilPlugin::getPluginObject(IL_COMP_MODULE, "TestQuestionPool", "qst", "assCodeQuestion");
+		$this->plugin = initPluginObject("assCodeQuestion");
 		$this->plugin->includeClass("ui/codeBlockUI.php");
 		$this->plugin->includeClass("class.assCodeQuestion.php");
 				
@@ -86,7 +88,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 * @param
 	 * @return
 	 */
-	function executeCommand()
+	function executeCommand(): void
 	{
 		global $ilCtrl;
  
@@ -118,7 +120,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	/**
 	 * Form for new elements
 	 */
-	function insert()
+	function insert(): void
 	{
 		global $tpl;
 
@@ -132,7 +134,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	/**
 	 * Save new pc example element
 	 */
-	public function create()
+	public function create(): void
 	{
 		$this->setTabs("insert", true);
 		$this->store(true);
@@ -144,7 +146,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 * @param
 	 * @return
 	 */
-	function edit()
+	function edit(): void
 	{
 		global $tpl, $_GET;
 		
@@ -161,7 +163,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 * @param
 	 * @return
 	 */
-	function update()
+	function update(): void
 	{
 		$this->setTabs("edit");
 		$this->store(false);	
@@ -170,7 +172,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	/**
 	 * Cancel
 	 */
-	function cancel()
+	function cancel(): void
 	{
 		$this->returnToParent();
 	}
@@ -350,7 +352,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 * @param string $a_mode (edit, presentation, preview, offline)s
 	 * @return string $html
 	 */
-	function getElementHTML($a_mode, array $a_properties, $a_plugin_version)
+	function getElementHTML(string $a_mode, array $a_properties, string $plugin_version): string
 	{		
 		$object = new assCodeQuestion();		
 		$this->loadData($object, $a_properties);		

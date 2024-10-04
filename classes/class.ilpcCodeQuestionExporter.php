@@ -8,7 +8,7 @@
  */
 class ilpcCodeQuestionExporter extends ilPageComponentPluginExporter
 {
-	public function init()
+	public function init():void
 	{
 	}
 
@@ -20,7 +20,7 @@ class ilpcCodeQuestionExporter extends ilPageComponentPluginExporter
 	 * @param		array		ids
 	 * @return		array		array of array with keys "component", entity", "ids"
 	 */
-	function getXmlExportHeadDependencies($a_entity, $a_target_release, $a_ids)
+	function getXmlExportHeadDependencies(string $a_entity, string $a_target_release, array $a_ids): array
 	{
 		// collect the files to export
 		$file_ids = array();
@@ -56,7 +56,7 @@ class ilpcCodeQuestionExporter extends ilPageComponentPluginExporter
 	 * @param	string		id
 	 * @return	string		xml string
 	 */
-	public function getXmlRepresentation($a_entity, $a_schema_version, $a_id)
+	public function getXmlRepresentation(string $a_entity, string $a_schema_version, string $a_id): string
 	{
         if ($a_entity == "pgcp") {
 
@@ -82,7 +82,7 @@ class ilpcCodeQuestionExporter extends ilPageComponentPluginExporter
 	 * @param		array		ids
 	 * @return		array		array of array with keys "component", entity", "ids"
 	 */
-	function getXmlExportTailDependencies($a_entity, $a_target_release, $a_ids)
+	function getXmlExportTailDependencies(string $a_entity, string $a_target_release, array $a_ids): array
 	{
 		return array();
 	}
@@ -103,7 +103,7 @@ class ilpcCodeQuestionExporter extends ilPageComponentPluginExporter
 	 *
 	 * @return		array
 	 */
-	public function getValidSchemaVersions($a_entity)
+	public function getValidSchemaVersions(string $a_entity): array
 	{
 		return array(
 			'5.3.0' => array(

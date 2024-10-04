@@ -1,6 +1,7 @@
 <?php
 
 include_once("./Services/COPage/classes/class.ilPageComponentPlugin.php");
+require_once 'support/ilpcCodeQuestionExporter.helper.php';
 
 /**
 * Question plugin Example
@@ -18,10 +19,10 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 	{
 		parent::__construct();
         include_once "./Services/Component/classes/class.ilPlugin.php";
-		$this->plugin = ilPlugin::getPluginObject(IL_COMP_MODULE, "TestQuestionPool", "qst", "assCodeQuestion");
+		$this->plugin = initPluginObject("assCodeQuestion");
 		$this->plugin->includeClass("support/codeBlock.php");		
     }
-	final function getPluginName()
+	final function getPluginName(): string
 	{
 		return "pcCodeQuestion";
 	}
@@ -31,16 +32,16 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 	 *
 	 * @return string
 	 */
-	function isValidParentType($a_parent_type)
+	function isValidParentType(string $a_type): bool
 	{
-        //return in_array($a_parent_type, array("lm", "wpg", "cont"));
-        return in_array($a_parent_type, array("lm", "wpg"));
+        //return in_array($a_type, array("lm", "wpg", "cont"));
+        return in_array($a_type, array("lm", "wpg"));
 	}
 
 	/**
 	 * Get Javascript files
 	 */
-	function getJavascriptFiles($a_mode)
+	function getJavascriptFiles(string $a_mode): array
 	{		
 		// if ($a_mode=='presentation'){			
 		//  	return array("js/legacyHelper.js");
@@ -51,7 +52,7 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 	/**
 	 * Get css files
 	 */
-	function getCssFiles($a_mode)
+	function getCssFiles(string $a_mode): array
 	{
 		// if ($a_mode=='presentation'){
 		// 	return codeBlocksUI::getCSSFiles('../../../../../../../'.ilpcCodeQuestionPluginGUI::URL_PATH);
@@ -64,7 +65,7 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
      * @param array 	$a_properties		(properties saved in the page, should be modified if neccessary)
      * @param string	$a_plugin_version	(plugin version of the properties)
      */
-    public function onClone(&$a_properties, $a_plugin_version)
+    public function onClone(array &$a_properties, string $a_plugin_version): void
     {		        
 		if ($question_id = $a_properties['id'])
 		{
@@ -85,7 +86,7 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
      * @param array 	$a_properties		properties saved in the page (will be deleted afterwards)
      * @param string	$a_plugin_version	plugin version of the properties
      */
-    public function onDelete($a_properties, $a_plugin_version)
+    public function onDelete(array $a_properties, string $a_plugin_version, bool $move_operation = false): void
     {		
 		if ($question_id = $a_properties['id']){
 			$this->deleteDataWithID($question_id);

@@ -8,7 +8,7 @@
  */
 class ilpcCodeQuestionImporter extends ilPageComponentPluginImporter
 {
-	public function init()
+	public function init():void
 	{
 	}
 
@@ -22,7 +22,7 @@ class ilpcCodeQuestionImporter extends ilPageComponentPluginImporter
 	 * @param	string			$a_xml
 	 * @param	ilImportMapping	$a_mapping
 	 */
-	public function importXmlRepresentation($a_entity, $a_id, $a_xml, $a_mapping)
+	public function importXmlRepresentation(string $a_entity, string $a_id, string $a_xml, ilImportMapping $a_mapping): void
 	{
 		/** @var ilpcCodeQuestionPlugin $plugin */
         $plugin = ilPluginAdmin::getPluginObject(IL_COMP_SERVICE, 'COPage', 'pgcp', 'pcCodeQuestion');
