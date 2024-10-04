@@ -1,5 +1,5 @@
 <?php 
-    function initPluginObject(string $plugin_name):ilPlugin{
+    function pcCodeQuestionExporter_initPluginObject(string $plugin_name):ilPlugin{
         // init the plugin object
         try {
             global $DIC;

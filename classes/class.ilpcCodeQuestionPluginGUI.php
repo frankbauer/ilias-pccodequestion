@@ -1,6 +1,6 @@
 <?php
 include_once("./Services/COPage/classes/class.ilPageComponentPluginGUI.php");
-require_once 'support/ilpcCodeQuestionExporter.helper.php';
+require_once 'ilpcCodeQuestionExporter.helper.php';
 
 /**
  * Code Question Page user interface plugin
@@ -29,7 +29,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	protected $tpl;
 
 	/** @var ilassCodeQuestionPlugin */
-	protected ilPageComponentPlugin $plugin;
+	protected ilassCodeQuestionPlugin $code_plugin;
 
 	/** @var ilAccessHandler */
     protected $access;
@@ -61,9 +61,9 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 		parent::__construct();
 		
 		include_once "./Services/Component/classes/class.ilPlugin.php";
-		$this->plugin = initPluginObject("assCodeQuestion");
-		$this->plugin->includeClass("ui/codeBlockUI.php");
-		$this->plugin->includeClass("class.assCodeQuestion.php");
+		$this->code_plugin = pcCodeQuestionExporter_initPluginObject("assCodeQuestion");
+		//$this->code_plugin->includeClass("ui/codeBlockUI.php");
+		//$this->code_plugin->includeClass("class.assCodeQuestion.php");
 				
 		global $DIC;
 		
@@ -181,7 +181,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 * Creat new entry in our databse
 	 */
 	private function createData($object){
-		$id = $this->plugin->storeData($object->blocks->getJSONEncodedAdditionalData());
+		$id = $this->code_plugin->storeData($object->blocks->getJSONEncodedAdditionalData());
 		$object->setID($id);
         
         return $id;
@@ -191,7 +191,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 * Creat new entry in our databse
 	 */
 	private function updateData($object){
-		$this->plugin->updateDataForID($object->blocks->getJSONEncodedAdditionalData(), $object->getID());
+		$this->code_plugin->updateDataForID($object->blocks->getJSONEncodedAdditionalData(), $object->getID());
         return $object;
 	}
 
@@ -207,7 +207,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
         if ($prop['data'] != '' && $prop['v']>=1 ){
             $return = array('data' => $prop['data']);
         } else {                    
-            $return = $this->plugin->loadDataForID($id);            
+            $return = $this->code_plugin->loadDataForID($id);            
         }
         
 		$object->loadDataToBlocks($return, $id);
@@ -321,7 +321,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 		$template = $this->plugin->getTemplate("tpl.copg_pgcp_codeqstpage_output.html");	
 		$object->blocks()->ui()->prepareTemplate($this->tpl, self::URL_PATH);				
 		
-		$html = $object->blocks()->ui()->render($false, false, false, NULL, NULL);
+		$html = $object->blocks()->ui()->render(NULL, false, false, NULL, NULL);
 
 		$template->setVariable("UUID", $object->blocks()->ui()->getUUID());
 		$template->setVariable("QUESTIONTEXT", "");
@@ -331,7 +331,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
         $template->setVariable("QUESTION_ID", $object->getId());
 		$template->setVariable("LABEL_VALUE1", $object->getPlugin()->txt('label_value1'));
 
-		$template->setVariable("MOUNTY", $object->blocks()->ui()->mountyJSCode(self::URL_PATH, !$forceAddJSAndCSS));		
+		$template->setVariable("MOUNTY", $object->blocks()->ui()->mountyJSCode(self::URL_PATH, !$forceAddJSAndCSS));				
 		return $template->get();	
 	}
 

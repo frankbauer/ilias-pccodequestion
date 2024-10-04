@@ -1,7 +1,7 @@
 <?php
 
 include_once("./Services/COPage/classes/class.ilPageComponentPlugin.php");
-require_once 'support/ilpcCodeQuestionExporter.helper.php';
+require_once 'ilpcCodeQuestionExporter.helper.php';
 
 /**
 * Question plugin Example
@@ -15,12 +15,16 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
     const DATA_VERSION = 1;
     /** @var ilassCodeQuestionPlugin */
 	protected $plugin;
-    public function __construct()
+    public function __construct(
+		\ilDBInterface $db,
+        \ilComponentRepositoryWrite $component_repository,
+        string $id
+	)
 	{
-		parent::__construct();
+		parent::__construct($db, $component_repository, $id);
         include_once "./Services/Component/classes/class.ilPlugin.php";
-		$this->plugin = initPluginObject("assCodeQuestion");
-		$this->plugin->includeClass("support/codeBlock.php");		
+		$this->plugin = pcCodeQuestionExporter_initPluginObject("assCodeQuestion");
+		//$this->plugin->includeClass("support/codeBlock.php");		
     }
 	final function getPluginName(): string
 	{
