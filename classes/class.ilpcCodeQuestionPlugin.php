@@ -39,7 +39,7 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 	function isValidParentType(string $a_type): bool
 	{
         //return in_array($a_type, array("lm", "wpg", "cont"));
-        return in_array($a_type, array("lm", "wpg"));
+        return in_array($a_type, array("lm", "wpg", "cont"));
 	}
 
 	/**

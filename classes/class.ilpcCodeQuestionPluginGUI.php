@@ -181,7 +181,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 * Creat new entry in our databse
 	 */
 	private function createData($object){
-		$id = $this->code_plugin->storeData($object->blocks->getJSONEncodedAdditionalData());
+		$id = $this->plugin->storeData($object->blocks->getJSONEncodedAdditionalData());
 		$object->setID($id);
         
         return $id;
@@ -191,7 +191,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 * Creat new entry in our databse
 	 */
 	private function updateData($object){
-		$this->code_plugin->updateDataForID($object->blocks->getJSONEncodedAdditionalData(), $object->getID());
+		$this->plugin->updateDataForID($object->blocks->getJSONEncodedAdditionalData(), $object->getID());
         return $object;
 	}
 
@@ -207,7 +207,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
         if ($prop['data'] != '' && $prop['v']>=1 ){
             $return = array('data' => $prop['data']);
         } else {                    
-            $return = $this->code_plugin->loadDataForID($id);            
+            $return = $this->plugin->loadDataForID($id);            
         }
         
 		$object->loadDataToBlocks($return, $id);
@@ -262,7 +262,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 			}
 			if ($res)
 			{
-				ilUtil::sendSuccess($lng->txt("msg_obj_modified"), true);
+				$this->tpl->setOnScreenMessage('success', $lng->txt("msg_obj_modified"));
 				$this->returnToParent();
 			}
 		}
