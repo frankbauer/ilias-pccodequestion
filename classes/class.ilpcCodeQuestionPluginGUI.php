@@ -188,7 +188,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	}
 
 	/**
-	 * Creat new entry in our databse
+	 * Update entry in our databse
 	 */
 	private function updateData($object){
 		$this->plugin->updateDataForID($object->blocks->getJSONEncodedAdditionalData(), $object->getID());
@@ -196,24 +196,32 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	}
 
 	/**
-	 * Creat new entry in our databse
+	 * Load entry from our databse
 	 */
 	private function loadData($object, $prop=NULL){
 		if ($prop==NULL) {
 			$prop = $this->getProperties();
 		}
 		$id = $prop['id']+0;
-		
-        if ($prop['data'] != '' && $prop['v']>=1 ){
-            $return = array('data' => $prop['data']);
-        } else {                    
-            $return = $this->plugin->loadDataForID($id);            
-        }
-        
-		$object->loadDataToBlocks($return, $id);
-        $object->setID($id);
 
-        return $object;
+		if (isset($prop['is_base64']) && $prop['is_base64']){
+			$oldv = $prop['v'] + 0;
+			unset($prop['v']);
+			$prop['data'] = base64_decode($prop['data']);
+			$prop['is_base64'] = false;
+			$prop['v'] = $oldv;
+		}
+		
+		if ($prop['data'] != '' && $prop['v']>=1 ){
+				$return = array('data' => $prop['data']);
+		} else {                    
+				$return = $this->plugin->loadDataForID($id);            
+		}
+		
+		$object->loadDataToBlocks($return, $id);
+		$object->setID($id);
+		
+		return $object;
 	}
 
 
@@ -333,18 +341,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 
 		$template->setVariable("MOUNTY", $object->blocks()->ui()->mountyJSCode(self::URL_PATH, !$forceAddJSAndCSS));				
 		return $template->get();	
-	}
-
-	private function endsWith($haystack, $needle)
-	{
-		$length = strlen($needle);
-		if ($length == 0) {
-			return true;
-		}
-
-		return (substr($haystack, -$length) === $needle);
-	}    
-	
+	}  
  
 	/**
 	 * Get HTML for element

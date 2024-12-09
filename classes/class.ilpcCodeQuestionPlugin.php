@@ -71,18 +71,22 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
      */
     public function onClone(array &$a_properties, string $a_plugin_version): void
     {		        
-		if ($question_id = $a_properties['id'])
-		{
-			$data = $this->loadDataForID($question_id);
-			$id = $this->storeData(trim($a_properties['data']));
-            $a_properties['id'] = $id;
+			if ($question_id = $a_properties['id']) {
+				$data = $this->loadDataForID($question_id);				
 
-            //make sure v is the last property, and data ends with a space
-            $oldv = $a_properties['v'] + 0;
-            unset($a_properties['v']);
-            $a_properties['data'] = codeBlock::fixCodeForExport(trim($a_properties['data'])).' ';
-            $a_properties['v'] = $oldv;
-		}
+				$id = $this->storeData(trim($a_properties['data']));
+				$a_properties['id'] = $id;
+
+				//make sure v is the last property, and data ends with a space
+				$oldv = $a_properties['v'] + 0;
+				unset($a_properties['v']);
+				//$a_properties['data'] = codeBlock::fixCodeForExport(trim($a_properties['data'])).' ';
+				$a_properties['data'] = base64_encode($a_properties['data']);
+				$a_properties['is_base64'] = true;
+				$a_properties['v'] = $oldv;
+				//print_r($a_properties);
+			}
+			//die;
     }
 
     /**
