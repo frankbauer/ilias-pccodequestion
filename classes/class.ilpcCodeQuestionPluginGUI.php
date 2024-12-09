@@ -205,6 +205,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 		$id = $prop['id']+0;
 
 		if (isset($prop['is_base64']) && $prop['is_base64']){
+			//this is very odd behaviour, but we need to make sure that v is the last entry
 			$oldv = $prop['v'] + 0;
 			unset($prop['v']);
 			$prop['data'] = base64_decode($prop['data']);
