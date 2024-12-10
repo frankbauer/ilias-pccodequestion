@@ -1,6 +1,5 @@
 <?php
 include_once("./Services/COPage/classes/class.ilPageComponentPluginGUI.php");
-require_once 'ilpcCodeQuestionExporter.helper.php';
 
 /**
  * Code Question Page user interface plugin
@@ -61,9 +60,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 		parent::__construct();
 
 		include_once "./Services/Component/classes/class.ilPlugin.php";
-		$this->code_plugin = pcCodeQuestionExporter_initPluginObject("assCodeQuestion");
-		//$this->code_plugin->includeClass("ui/codeBlockUI.php");
-		//$this->code_plugin->includeClass("class.assCodeQuestion.php");
+		$this->code_plugin = ilpcCodeQuestionPlugin::initPluginObject("assCodeQuestion");
 
 		global $DIC;
 
