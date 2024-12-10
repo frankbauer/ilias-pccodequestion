@@ -6,10 +6,8 @@
  *
  * @ingroup ServicesCOPage
  */
-class ilpcCodeQuestionExporter extends ilPageComponentPluginExporter
-{
-	public function init(): void
-	{
+class ilpcCodeQuestionExporter extends ilPageComponentPluginExporter {
+	public function init(): void {
 	}
 
 	/**
@@ -20,8 +18,7 @@ class ilpcCodeQuestionExporter extends ilPageComponentPluginExporter
 	 * @param		array		ids
 	 * @return		array		array of array with keys "component", entity", "ids"
 	 */
-	function getXmlExportHeadDependencies(string $a_entity, string $a_target_release, array $a_ids): array
-	{
+	function getXmlExportHeadDependencies(string $a_entity, string $a_target_release, array $a_ids): array {
 		// collect the files to export
 		$file_ids = array();
 		foreach ($a_ids as $id) {
@@ -54,28 +51,27 @@ class ilpcCodeQuestionExporter extends ilPageComponentPluginExporter
 	 * @param	string		id
 	 * @return	string		xml string
 	 */
-	public function getXmlRepresentation(string $a_entity, string $a_schema_version, string $a_id): string
-	{
+	public function getXmlRepresentation(string $a_entity, string $a_schema_version, string $a_id): string {
 		global $DIC;
 		$component_factory = $DIC["component.factory"];
 		$xml = '';
-		
+
 		foreach ($component_factory->getActivePluginsInSlot("pgcp") as $plugin) {
-			if ($plugin->getPluginName() == 'pcCodeQuestion'){
+			if ($plugin->getPluginName() == 'pcCodeQuestion') {
 				$prop = self::getPCProperties($a_id);
 				$id = $prop['id'] + 0;
-				$data = $plugin->loadDataForID($id);				
-		
-				$xml = '<item>' . base64_encode($data['data']) . '</item>';									
+				$data = $plugin->loadDataForID($id);
+
+				$xml = '<item>' . base64_encode($data['data']) . '</item>';
 			}
-		}	
+		}
 
 		//no plugin found, so we write at least the passed properties		
-		if ($xml==''){
+		if ($xml == '') {
 			$data = self::getPCProperties($a_id);
-			$xml =  '<item>' . base64_encode($data['data']) . '</item>';	
+			$xml = '<item>' . base64_encode($data['data']) . '</item>';
 		}
-		return $xml;		
+		return $xml;
 	}
 
 	/**
@@ -86,8 +82,7 @@ class ilpcCodeQuestionExporter extends ilPageComponentPluginExporter
 	 * @param		array		ids
 	 * @return		array		array of array with keys "component", entity", "ids"
 	 */
-	function getXmlExportTailDependencies(string $a_entity, string $a_target_release, array $a_ids): array
-	{
+	function getXmlExportTailDependencies(string $a_entity, string $a_target_release, array $a_ids): array {
 		return array();
 	}
 
@@ -107,8 +102,7 @@ class ilpcCodeQuestionExporter extends ilPageComponentPluginExporter
 	 *
 	 * @return		array
 	 */
-	public function getValidSchemaVersions(string $a_entity): array
-	{
+	public function getValidSchemaVersions(string $a_entity): array {
 		return array(
 			'5.3.0' => array(
 				'namespace' => 'http://www.ilias.de/',

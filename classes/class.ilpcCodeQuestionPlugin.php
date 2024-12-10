@@ -10,8 +10,7 @@ require_once "./Services/Component/classes/class.ilPlugin.php";
  * @version $Id$
  * @ingroup ModulesTestQuestionPool
  */
-class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
-{
+class ilpcCodeQuestionPlugin extends ilPageComponentPlugin {
 	const DATA_VERSION = 2;
 	/** @var ilassCodeQuestionPlugin */
 	protected $plugin;
@@ -24,13 +23,11 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 
 		$this->plugin = ilpcCodeQuestionPlugin::initPluginObject("assCodeQuestion");
 	}
-	final function getPluginName(): string
-	{
+	final function getPluginName(): string {
 		return "pcCodeQuestion";
 	}
 
-	public static function initPluginObject(string $plugin_name): ilPlugin|null
-	{
+	public static function initPluginObject(string $plugin_name): ilPlugin|null {
 		global $DIC;
 		$ilLog = $DIC->logger()->root();
 
@@ -47,7 +44,7 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 				throw new ilPluginException($plugin_name . ' plugin is not active');
 			}
 		} catch (ilPluginException $e) {
-			$ilLog->write("Error loading Plugin " . $plugin_name . ": " . $e->getMessage(), $ilLog->ERROR);			
+			$ilLog->write("Error loading Plugin " . $plugin_name . ": " . $e->getMessage(), $ilLog->ERROR);
 		}
 
 		return null;
@@ -58,8 +55,7 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 	 *
 	 * @return string
 	 */
-	function isValidParentType(string $a_type): bool
-	{
+	function isValidParentType(string $a_type): bool {
 		//return in_array($a_type, array("lm", "wpg", "cont"));
 		return in_array($a_type, array("lm", "wpg", "cont"));
 	}
@@ -67,8 +63,7 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 	/**
 	 * Get Javascript files
 	 */
-	function getJavascriptFiles(string $a_mode): array
-	{
+	function getJavascriptFiles(string $a_mode): array {
 		// if ($a_mode=='presentation'){			
 		//  	return array("js/legacyHelper.js");
 		// }
@@ -78,8 +73,7 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 	/**
 	 * Get css files
 	 */
-	function getCssFiles(string $a_mode): array
-	{
+	function getCssFiles(string $a_mode): array {
 		// if ($a_mode=='presentation'){
 		// 	return codeBlocksUI::getCSSFiles('../../../../../../../'.ilpcCodeQuestionPluginGUI::URL_PATH);
 		// }
@@ -91,8 +85,7 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 	 * @param array 	$a_properties		(properties saved in the page, should be modified if neccessary)
 	 * @param string	$a_plugin_version	(plugin version of the properties)
 	 */
-	public function onClone(array &$a_properties, string $a_plugin_version): void
-	{
+	public function onClone(array &$a_properties, string $a_plugin_version): void {
 		if ($question_id = $a_properties['id']) {
 			$data = $this->loadDataForID($question_id);
 
@@ -113,15 +106,13 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 	 * @param array 	$a_properties		properties saved in the page (will be deleted afterwards)
 	 * @param string	$a_plugin_version	plugin version of the properties
 	 */
-	public function onDelete(array $a_properties, string $a_plugin_version, bool $move_operation = false): void
-	{
+	public function onDelete(array $a_properties, string $a_plugin_version, bool $move_operation = false): void {
 		if ($question_id = $a_properties['id']) {
 			$this->deleteDataWithID($question_id);
 		}
 	}
 
-	function storeData($data)
-	{
+	function storeData($data) {
 		/** @var $ilDB \ilDBInterface  */
 		global $ilDB;
 
@@ -131,8 +122,7 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 		return $id;
 	}
 
-	function updateDataForID($data, $id)
-	{
+	function updateDataForID($data, $id) {
 		/** @var $ilDB \ilDBInterface  */
 		global $ilDB;
 
@@ -142,8 +132,7 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 
 
 
-	function deleteDataWithID($id)
-	{
+	function deleteDataWithID($id) {
 		/** @var $ilDB \ilDBInterface  */
 		global $ilDB;
 
@@ -151,8 +140,7 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 		$result = $ilDB->manipulateF($query, array('integer'), array($id));
 	}
 
-	function loadDataForID($id)
-	{
+	function loadDataForID($id) {
 		/** @var $ilDB \ilDBInterface  */
 		global $ilDB;
 

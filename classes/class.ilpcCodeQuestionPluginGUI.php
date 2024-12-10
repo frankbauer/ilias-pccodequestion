@@ -10,8 +10,7 @@ include_once("./Services/COPage/classes/class.ilPageComponentPluginGUI.php");
  * @version $Id$
  * @ilCtrl_isCalledBy ilpcCodeQuestionPluginGUI: ilPCPluggedGUI
  */
-class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
-{
+class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI {
 	/**
 	 * @const	string	URL base path for including special javascript and css files
 	 */
@@ -55,8 +54,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 * @param integer $id The database id of a question object
 	 * @access public
 	 */
-	public function __construct()
-	{
+	public function __construct() {
 		parent::__construct();
 
 		include_once "./Services/Component/classes/class.ilPlugin.php";
@@ -86,8 +84,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 * @param
 	 * @return
 	 */
-	function executeCommand(): void
-	{
+	function executeCommand(): void {
 		global $ilCtrl;
 
 		$next_class = $ilCtrl->getNextClass();
@@ -103,13 +100,11 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 		}
 	}
 
-	private function getLanguage()
-	{
+	private function getLanguage() {
 		return $this->object->blocks()->getLanguage();
 	}
 
-	private function prepareTemplate()
-	{
+	private function prepareTemplate() {
 		$this->object->blocks()->ui()->prepareTemplate($this->tpl, self::URL_PATH);
 	}
 
@@ -117,8 +112,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	/**
 	 * Form for new elements
 	 */
-	function insert(): void
-	{
+	function insert(): void {
 		global $tpl;
 
 		$this->setTabs("insert", true);
@@ -131,8 +125,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	/**
 	 * Save new pc example element
 	 */
-	public function create(): void
-	{
+	public function create(): void {
 		$this->setTabs("insert", true);
 		$this->store(true);
 	}
@@ -143,8 +136,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 * @param
 	 * @return
 	 */
-	function edit(): void
-	{
+	function edit(): void {
 		global $tpl, $_GET;
 
 		$this->setTabs("edit");
@@ -160,8 +152,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 * @param
 	 * @return
 	 */
-	function update(): void
-	{
+	function update(): void {
 		$this->setTabs("edit");
 		$this->store(false);
 	}
@@ -169,16 +160,14 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	/**
 	 * Cancel
 	 */
-	function cancel(): void
-	{
+	function cancel(): void {
 		$this->returnToParent();
 	}
 
 	/**
 	 * Creat new entry in our database
 	 */
-	private function createData($object)
-	{
+	private function createData($object) {
 		$id = $this->plugin->storeData($object->blocks->getJSONEncodedAdditionalData());
 		$object->setID($id);
 
@@ -188,8 +177,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	/**
 	 * Update entry in our database
 	 */
-	private function updateData($object)
-	{
+	private function updateData($object) {
 		$this->plugin->updateDataForID($object->blocks->getJSONEncodedAdditionalData(), $object->getID());
 		return $object;
 	}
@@ -197,15 +185,14 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	/**
 	 * Load entry from our database
 	 */
-	private function loadData($object, $prop = NULL)
-	{
+	private function loadData($object, $prop = NULL) {
 		if ($prop == NULL) {
 			$prop = $this->getProperties();
 		}
 		$id = $prop['id'] + 0;
 		$data = '';
 		$version = $prop['v'] && 0;
-		if (isset($prop['data']) && isset($prop['is_base64']) && $prop['is_base64']) {			
+		if (isset($prop['data']) && isset($prop['is_base64']) && $prop['is_base64']) {
 			$data = base64_decode($prop['data']);
 		}
 
@@ -227,8 +214,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 * 
 	 * @param        bool        $a_create        true => create new item, false => update existing item
 	 */
-	private function store($a_create = true)
-	{
+	private function store($a_create = true) {
 		global $tpl, $lng, $ilCtrl, $_POST;
 		$object = new assCodeQuestion();
 
@@ -283,8 +269,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 *
 	 * @param        int        $a_mode        Edit Mode
 	 */
-	public function initForm($object, $a_create = false)
-	{
+	public function initForm($object, $a_create = false) {
 		global $lng, $ilCtrl;
 
 		include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
@@ -319,8 +304,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 		return $form;
 	}
 
-	private function render($object, $forceAddJSAndCSS = false)
-	{
+	private function render($object, $forceAddJSAndCSS = false) {
 		$language = $object->blocks()->getLanguage();
 
 		$template = $this->plugin->getTemplate("tpl.copg_pgcp_codeqstpage_output.html");
@@ -346,8 +330,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 * @param string $a_mode (edit, presentation, preview, offline)s
 	 * @return string $html
 	 */
-	function getElementHTML(string $a_mode, array $a_properties, string $plugin_version): string
-	{
+	function getElementHTML(string $a_mode, array $a_properties, string $plugin_version): string {
 		$object = new assCodeQuestion();
 		$this->loadData($object, $a_properties);
 		return $this->render($object, $a_mode == 'presentation');
@@ -359,8 +342,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 	 * @param
 	 * @return
 	 */
-	function setTabs($a_active, $a_create = false)
-	{
+	function setTabs($a_active, $a_create = false) {
 		global $ilTabs, $ilCtrl;
 
 		$pl = $this->getPlugin();

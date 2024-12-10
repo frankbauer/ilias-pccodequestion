@@ -6,10 +6,8 @@
  *
  * @ingroup ServicesCOPage
  */
-class ilpcCodeQuestionImporter extends ilPageComponentPluginImporter
-{
-	public function init(): void
-	{
+class ilpcCodeQuestionImporter extends ilPageComponentPluginImporter {
+	public function init(): void {
 	}
 
 
@@ -22,8 +20,7 @@ class ilpcCodeQuestionImporter extends ilPageComponentPluginImporter
 	 * @param	string			$a_xml
 	 * @param	ilImportMapping	$a_mapping
 	 */
-	public function importXmlRepresentation(string $a_entity, string $a_id, string $a_xml, ilImportMapping $a_mapping): void
-	{
+	public function importXmlRepresentation(string $a_entity, string $a_id, string $a_xml, ilImportMapping $a_mapping): void {
 		global $DIC;
 		$component_factory = $DIC["component.factory"];
 		return;
@@ -33,7 +30,7 @@ class ilpcCodeQuestionImporter extends ilPageComponentPluginImporter
 
 				$properties = self::getPCProperties($new_id);
 				$version = self::getPCVersion($new_id);
-				
+
 
 				// write the mapped file id to the properties
 				if (isset($properties['page_file']) && ($old_file_id = $properties['page_file'])) {
@@ -49,19 +46,19 @@ class ilpcCodeQuestionImporter extends ilPageComponentPluginImporter
 				}
 
 				print_r($a_entity);
-				print("\n<hr>\n");
+				print ("\n<hr>\n");
 				print_r($a_id);
-				print("\n<hr>\n");
+				print ("\n<hr>\n");
 				print_r($new_id);
-				print("\n<hr>\n");
+				print ("\n<hr>\n");
 				print_r($version);
-				print("\n<hr>\n");
+				print ("\n<hr>\n");
 				print_r($properties);
-				print("\n<hr>\n");
+				print ("\n<hr>\n");
 				die;
 				self::setPCProperties($new_id, $properties);
 				self::setPCVersion($new_id, $version);
-				
+
 			}
 		}
 	}
