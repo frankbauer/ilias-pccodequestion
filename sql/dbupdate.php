@@ -6,11 +6,15 @@
  * @author Frank Bauer <frank.bauer@fau.de>
  * @version $Id$
  */ 
-?>
+global $ilDB;
 
-CREATE TABLE `copg_pgcp_codeqstpage` (
-	`code_id` int(11) NOT NULL AUTO_INCREMENT,
-	`data` LONGTEXT NOT NULL,
-	PRIMARY KEY (`code_id`)
-  ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;	
+if (!$ilDB->tableExists('copg_pgcp_codeqstpage')) {
+	$ilDB->queryF("
+		CREATE TABLE `copg_pgcp_codeqstpage` (
+			`code_id` int(11) NOT NULL AUTO_INCREMENT,
+			`data` LONGTEXT NOT NULL,
+			PRIMARY KEY (`code_id`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+	");
+}
 ?>
