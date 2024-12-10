@@ -8,7 +8,7 @@
  */
 class ilpcCodeQuestionExporter extends ilPageComponentPluginExporter
 {
-	public function init():void
+	public function init(): void
 	{
 	}
 
@@ -24,23 +24,21 @@ class ilpcCodeQuestionExporter extends ilPageComponentPluginExporter
 	{
 		// collect the files to export
 		$file_ids = array();
-		foreach ($a_ids as $id)
-		{
+		foreach ($a_ids as $id) {
 			$properties = self::getPCProperties($id);
-			if (isset($properties['page_file']))
-			{
+			if (isset($properties['page_file'])) {
 				$file_ids[] = $properties['page_file'];
 			}
-        }
-        
+		}
+
 		// add the files as dependencies
-		if (!empty(($file_ids)))
-		{
+		if (!empty(($file_ids))) {
 			return array(
 				array(
 					"component" => "Modules/File",
 					"entity" => "file",
-					"ids" => $file_ids)
+					"ids" => $file_ids
+				)
 			);
 		}
 
@@ -58,20 +56,26 @@ class ilpcCodeQuestionExporter extends ilPageComponentPluginExporter
 	 */
 	public function getXmlRepresentation(string $a_entity, string $a_schema_version, string $a_id): string
 	{
-        if ($a_entity == "pgcp") {
+		global $DIC;
+		$component_factory = $DIC["component.factory"];
+		$xml = '';
+		
+		foreach ($component_factory->getActivePluginsInSlot("pgcp") as $plugin) {
+			if ($plugin->getPluginName() == 'pcCodeQuestion'){
+				$prop = self::getPCProperties($a_id);
+				$id = $prop['id'] + 0;
+				$data = $plugin->loadDataForID($id);				
+		
+				$xml = '<item>' . base64_encode($data['data']) . '</item>';									
+			}
+		}	
 
-            /** @var ilpcCodeQuestionPlugin $plugin */
-            $plugin = ilPluginAdmin::getPluginObject(IL_COMP_SERVICE, 'COPage', 'pgcp', 'pcCodeQuestion');
-            $prop = self::getPCProperties($a_id);
-            $id = $prop['id']+0;
-            $data = $plugin->loadDataForID($id);
-
-            //Get XML
-            $xml = '<item>'.base64_encode($data['data']).'</item>';
-            return $xml;
-        } else {
-            return $this->ds->getXmlRepresentation($a_entity, $a_schema_version, $a_id, "", true, true);
-        }
+		//no plugin found, so we write at least the passed properties		
+		if ($xml==''){
+			$data = self::getPCProperties($a_id);
+			$xml =  '<item>' . base64_encode($data['data']) . '</item>';	
+		}
+		return $xml;		
 	}
 
 	/**
@@ -107,11 +111,11 @@ class ilpcCodeQuestionExporter extends ilPageComponentPluginExporter
 	{
 		return array(
 			'5.3.0' => array(
-				'namespace'    => 'http://www.ilias.de/',
+				'namespace' => 'http://www.ilias.de/',
 				//'xsd_file'     => 'pctpc_5_3.xsd',
 				'uses_dataset' => false,
-				'min'          => '5.3.0',
-				'max'          => ''
+				'min' => '5.3.0',
+				'max' => '9.999.0'
 			)
 		);
 	}
