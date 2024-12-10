@@ -206,17 +206,14 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 			$prop = $this->getProperties();
 		}
 		$id = $prop['id'] + 0;
-		if (isset($prop['is_base64']) && $prop['is_base64']) {
-			//this is very odd behaviour, but we need to make sure that v is the last entry
-			$oldv = $prop['v'] + 0;
-			unset($prop['v']);
-			$prop['data'] = base64_decode($prop['data']);
-			$prop['is_base64'] = false;
-			$prop['v'] = $oldv;
+		$data = '';
+		$version = $prop['v'] && 0;
+		if (isset($prop['data']) && isset($prop['is_base64']) && $prop['is_base64']) {			
+			$data = base64_decode($prop['data']);
 		}
 
-		if ($prop['data'] != '' && $prop['v'] >= 1) {
-			$return = array('data' => $prop['data']);
+		if ($data != '' && $version >= 1) {
+			$return = array('data' => $data);
 		} else {
 			$return = $this->plugin->loadDataForID($id);
 		}
@@ -248,14 +245,16 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 			$this->createData($object);
 			$properties = array(
 				'id' => $object->getID(),
-				'data' => $object->blocks->getJSONEncodedAdditionalData() . ' ',
+				'data' => base64_encode($object->blocks->getJSONEncodedAdditionalData()),
+				'is_base64' => true,
 				'v' => ilpcCodeQuestionPlugin::DATA_VERSION
 			);
 		} else {
 			$this->updateData($object);
 			$properties = array(
 				'id' => $object->getID(),
-				'data' => $object->blocks->getJSONEncodedAdditionalData() . ' ',
+				'data' => base64_encode($object->blocks->getJSONEncodedAdditionalData()),
+				'is_base64' => true,
 				'v' => ilpcCodeQuestionPlugin::DATA_VERSION
 			);
 		}
@@ -274,7 +273,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI
 				$res = $this->updateElement($properties);
 			}
 			if ($res) {
-				$this->tpl->setOnScreenMessage('success', $lng->txt("msg_obj_modified"));
+				//$this->tpl->setOnScreenMessage('success', $lng->txt("msg_obj_modified"));
 				$this->returnToParent();
 			}
 		}

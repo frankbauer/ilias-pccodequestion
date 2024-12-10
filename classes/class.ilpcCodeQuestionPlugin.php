@@ -2,6 +2,7 @@
 
 include_once("./Services/COPage/classes/class.ilPageComponentPlugin.php");
 require_once 'ilpcCodeQuestionExporter.helper.php';
+require_once "./Services/Component/classes/class.ilPlugin.php";
 
 /**
  * Question plugin Example
@@ -12,7 +13,7 @@ require_once 'ilpcCodeQuestionExporter.helper.php';
  */
 class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 {
-	const DATA_VERSION = 1;
+	const DATA_VERSION = 2;
 	/** @var ilassCodeQuestionPlugin */
 	protected $plugin;
 	public function __construct(
@@ -21,9 +22,8 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 		string $id
 	) {
 		parent::__construct($db, $component_repository, $id);
-		include_once "./Services/Component/classes/class.ilPlugin.php";
-		$this->plugin = pcCodeQuestionExporter_initPluginObject("assCodeQuestion");
-		//$this->plugin->includeClass("support/codeBlock.php");		
+		
+		$this->plugin = pcCodeQuestionExporter_initPluginObject("assCodeQuestion");	
 	}
 	final function getPluginName(): string
 	{
@@ -79,7 +79,6 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin
 			//make sure v is the last property, and data ends with a space
 			$oldv = $a_properties['v'] + 0;
 			unset($a_properties['v']);
-			//$a_properties['data'] = codeBlock::fixCodeForExport(trim($a_properties['data'])).' ';
 			$a_properties['data'] = base64_encode($a_properties['data']);
 			$a_properties['is_base64'] = true;
 			$a_properties['v'] = $oldv;
