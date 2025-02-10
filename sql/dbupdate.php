@@ -15,6 +15,6 @@ if (!$ilDB->tableExists('copg_pgcp_codeqstpage')) {
 			`data` LONGTEXT NOT NULL,
 			PRIMARY KEY (`code_id`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-	");
+	", array(), array());
 }
 ?>
