@@ -44,18 +44,7 @@ class ilpcCodeQuestionImporter extends ilPageComponentPluginImporter {
 					$id = $plugin->storeData($data);
 					$properties['id'] = $id;
 				}
-
-				print_r($a_entity);
-				print ("\n<hr>\n");
-				print_r($a_id);
-				print ("\n<hr>\n");
-				print_r($new_id);
-				print ("\n<hr>\n");
-				print_r($version);
-				print ("\n<hr>\n");
-				print_r($properties);
-				print ("\n<hr>\n");
-				die;
+				
 				self::setPCProperties($new_id, $properties);
 				self::setPCVersion($new_id, $version);
 
