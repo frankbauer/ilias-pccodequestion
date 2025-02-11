@@ -95,8 +95,13 @@ class ilpcCodeQuestionPlugin extends ilPageComponentPlugin {
 			//make sure v is the last property, and data ends with a space
 			$oldv = $a_properties['v'] + 0;
 			unset($a_properties['v']);
-			$a_properties['data'] = base64_encode($a_properties['data']);
-			$a_properties['is_base64'] = true;
+			if (isset($a_properties['is_base64']) && $a_properties['is_base64']) {
+				//NOP
+			} else {
+				$a_properties['data'] = base64_encode($a_properties['data']);
+				$a_properties['is_base64'] = true;
+			}
+			
 			$a_properties['v'] = $oldv;
 		}
 	}
