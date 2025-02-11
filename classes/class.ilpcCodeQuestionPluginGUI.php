@@ -191,7 +191,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI {
 		}
 		$id = $prop['id'] + 0;
 		$data = '';
-		$version = $prop['v'] && 0;
+		$version = $prop['v'] + 0;
 		if (isset($prop['data']) && isset($prop['is_base64']) && $prop['is_base64']) {
 			$data = base64_decode($prop['data']);
 		}
@@ -201,7 +201,7 @@ class ilpcCodeQuestionPluginGUI extends ilPageComponentPluginGUI {
 		} else {
 			$return = $this->plugin->loadDataForID($id);
 		}
-
+	  		
 		$object->loadDataToBlocks($return, $id);
 		$object->setID($id);
 
